@@ -1,0 +1,22 @@
+Notes for PD 
+
+Selector = data type
+Object sees selector in message and assigns an appropiate method to deal with it. 
+
+Messages = type aware. Can be anything. Float, bang, symbolic (ex text).
+
+CTRL 1-8 places objects GUI. 
+
+List has its own selector. 
+
+There are pointers in PD. Not so easy. 
+
+Array is a position in memory and can be viewed/modified by a graph. If you store a sound file in an array it will put it into the pd file (patch) and it will be huge. Table is two dimensional.
+
+You can view two arrays with one single graph (use "in last graph" option when creating array). 
+
+In/out = tabread and tabwrite (tabread~ and tabwrite~ for audio signals)
+
+Forum at http://puredata.hurleur.com/ forum. pdwiki en http://puredata.org 
+
+Read Chapter 3. of Designing sound Andy Farnell pd intro. 
