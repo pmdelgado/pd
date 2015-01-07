@@ -34,7 +34,7 @@ dspobj~.dll: dspobj~.c;
 
 # ----------------------- LINUX i386 -----------------------
 
-pd_linux: mtop.l_ia64 
+pd_linux: obj1.l_ia64 
 
 pd_linux32: obj1.l_i386 obj2.l_i386 obj3.l_i386 obj4.l_i386 \
     obj5.l_i386 dspobj~.l_i386
@@ -42,6 +42,10 @@ pd_linux32: obj1.l_i386 obj2.l_i386 obj3.l_i386 obj4.l_i386 \
 .SUFFIXES: .l_i386 .l_ia64
 
 LINUXCFLAGS = -DPD -O2 -funroll-loops -fomit-frame-pointer \
+    -Wall -W -Wshadow -Wstrict-prototypes \
+    -Wno-parentheses -Wno-switch
+
+#LINUXCFLAGS = -DPD -O2 -funroll-loops -fomit-frame-pointer \
     -Wall -W -Wshadow -Wstrict-prototypes -Werror \
     -Wno-unused -Wno-parentheses -Wno-switch
 
