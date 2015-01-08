@@ -2,6 +2,11 @@
 #include <math.h>
 #define LOGTEN 2.302585092994
 
+
+
+
+/* Independent methods */
+
 t_float prueba(t_float f)
 {
     if (f <= -1500) return(0);
@@ -9,11 +14,12 @@ t_float prueba(t_float f)
     else return (8.17579891564 * exp(.0577622650 * f));
 }
 
-/* ------------- corresponding objects ----------------------- */
+/*------------Constructor and declaration -----------------*/
 
-static t_class *prueba_class;
+static t_class *prueba_class; // pointer to new class, where is the data space??
 
 /* Constructor */
+/*   _new is called when the object is created, added with class_new in setup */
 
 static void *prueba_new(void)
 {
@@ -22,7 +28,19 @@ static void *prueba_new(void)
     return (x);
 }
 
-/* Define Float Outlet */
+/* ------------- Data space ----------------------- */
+
+/* Data space */
+
+/* ------------- Methods ----------------------- */
+/* 
+
+_float whenever a float is received by the object, added with class_addfloat in setup
+_bang called when a bang is received
+_rats or whatever, added with class_addmethod in setup
+
+each method then has to be added in the class setup
+*/
 
 static void prueba_float(t_object *x, t_float f)
 {
