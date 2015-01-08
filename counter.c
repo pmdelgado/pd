@@ -74,3 +74,5 @@ void counter_setup(void)
   class_addbang(counter_class, counter_bang);
   //class_sethelpsymbol(mtof_class, s);  
 }
+
+// follow construction of in and outlets 
