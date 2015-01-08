@@ -2,8 +2,11 @@
 #include <math.h>
 #define LOGTEN 2.302585092994
 
+typedef struct prueba
+{
+  t_object x_ob;
+} t_prueba;
 
-/* ------------- Data space ----------------------- */
 
 /* Independent methods */
 
@@ -16,7 +19,7 @@ t_float prueba(t_float f)
 
 /*------------Constructor and declaration -----------------*/
 
-static t_class *prueba_class; // pointer to new class
+static t_class *prueba_class; // pointer to new class, where is the data space??
 
 /* Constructor */
 
@@ -28,6 +31,10 @@ static void *prueba_new(void)
   outlet_new(x, &s_float); // constructs outlet of type float
     return (x);
 }
+
+/* ------------- Data space ----------------------- */
+
+/* Data space */
 
 /* in this case data space is not needed because methods are used with a t_object directly, instead of declaring a typedef of t_prueba which contains a t_object */
 
@@ -41,16 +48,15 @@ _rats or whatever, added with class_addmethod in setup
 each method then has to be added in the class setup
 */
 
-static void prueba_float(t_object *x, t_float f) // ojo!!  what is the difference bw t_float and t_floatarg?
+static void prueba_float(t_object *x, t_float f) // what is the difference bw t_float and t_floatarg?
 {
     outlet_float(x->ob_outlet, prueba(f));
 }
 
-static void prueba_bang(t_object *x)
+static void prueba_bang(t_object *x) 
 {
-  post("Hey!");
+  post("Hello world!"); 
 }
-
 
 
 /*------------ Class setup ----------*/
@@ -67,7 +73,8 @@ void prueba_setup(void)
 in order not to typedef a t_prueba with only a t_object member. */
     
     /*Add methods to class*/
-    class_addbang(prueba_class, prueba_bang);
+
     class_addfloat(prueba_class, (t_method)prueba_float); // add float method
+    class_addbang(prueba_class, prueba_bang);
     //class_sethelpsymbol(mtof_class, s);  
 }

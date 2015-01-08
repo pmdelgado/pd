@@ -1,1 +1,9 @@
-#N canvas 715 311 450 300 10;
+#N canvas 1066 311 450 300 10;
+#X obj 163 85 prueba;
+#X obj 134 38 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X floatatom 191 38 5 0 0 0 - - -;
+#X floatatom 178 145 5 0 0 0 - - -;
+#X connect 0 0 3 0;
+#X connect 1 0 0 0;
+#X connect 2 0 0 0;
