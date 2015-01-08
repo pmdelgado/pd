@@ -22,11 +22,39 @@ static t_class *counter_class; // pointer to new class
 
 /* Constructor */
 
-static void *counter_new(t_floatarg f)
+static void *counter_new(t_symbol *s, int argc, t_atom *argv) // it is declared like thi because of A_GIMME
 {
   t_counter *x = (t_counter *)pd_new(counter_class); // needs to return a pointer to the data space
-  x->i_count = f; //assigns input to internal variable in dataspace t_counter
-  outlet_new(&x->x_obj, &s_float); // constructs outlet of type float first argument - pointer to object, second argument - type
+  t_float f1=0, f2=0;
+  x->step=1;
+  switch(argc){
+  default:
+  case 3:
+    x->step=atom_getfloat(argv+2); //If three arguments are passed, these should be the lower boundary, the upper boundary and the step width. 
+  case 2:
+    f2=atom_getfloat(argv+1); // If only two arguments are passed, the step-width defaults to “1”
+  case 1:
+    f1=atom_getfloat(argv); // If only one argument is passed, this should be the initial value of the counter with step-width of “1”
+    break;
+  case 0:
+    break;
+  }
+  if(argc<2)f2=f1;
+  x->i_down = (f1<f2)?f1:f2;
+  x->i_up = (f1>f2)?f2:f2;
+
+  x->i_count = x->i_down; 
+  /*inlets*/
+
+  inlet_new(&x->x_obj,&x->x_obj.ob_pd,gensym("list"), gensym("bound")); //(interna of object, graphical rep.,substitution of 3 by 4 selector)
+
+  floatinlet_new(&x->x_obj, &x->step); // Passive, allows parts of data space written directly from outside. Not possible to check for illegal input. floatinlet_new(pointer to internal infrastructure, address where other objects can write too)
+
+  /*outlets*/
+
+  x->f_out = outlet_new(&x->x_obj, &s_float);
+  x->b_out = outlet_new(&x->x_obj, &s_bang); //pointers returned by outlet_new need to be saved in data space for later use (outlet routines)
+
   return (void *)x;
 }
 
@@ -75,4 +103,4 @@ void counter_setup(void)
   //class_sethelpsymbol(mtof_class, s);  
 }
 
-// follow construction of in and outlets 
+// follow 4.4 extended method space 
