@@ -36,7 +36,7 @@ dspobj~.dll: dspobj~.c;
 
 pd_linux: obj1.l_ia64 
 
-pd_linux32: obj1.l_i386 prueba.l_i386 
+pd_linux32: obj1.l_i386
 
 .SUFFIXES: .l_i386 .l_ia64
 
