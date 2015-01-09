@@ -8,7 +8,7 @@ clean: ; rm -f *.pd_linux *.o *.l_i386
 
 pd_linux: obj1.l_ia64 
 
-pd_linux32: prueba.l_i386 counter.l_i386
+pd_linux32: pan~.l_i386
 
 .SUFFIXES: .l_i386 .l_ia64
 

@@ -1,0 +1,105 @@
+#include "m_pd.h"
+
+/* ------------- Data space ----------------------- */
+
+typedef struct _pan_tilde
+{
+  t_object x_obj;
+
+  t_sample f_pan; // mixing factor
+  t_float f; // used for signal inlet, converts float to signal, dummy variable for CLASS_MAINSIGNALIN
+  
+  t_inlet *x_in2;
+  t_inlet *x_in3;
+
+  t_outlet *x_out;
+
+} t_pan_tilde;
+
+
+
+/*------------Constructor, destructor and declaration -----------------*/
+
+/* Declaration */
+
+static t_class *pan_tilde_class; // pointer to new class
+
+/* Destructor */
+
+static void pan_tilde_free(t_pan_tilde *x)
+{
+  inlet_free(x->x_in2);
+  inlet_free(x->x_in3);
+  outlet_free(x->x_out);
+}
+
+/* Constructor */
+
+static void *pan_tilde_new(t_floatarg f) // it is declared like thi because of A_DEFFLOAT in class_new 
+{
+  t_pan_tilde *x = (t_pan_tilde *)pd_new(pan_tilde_class); // needs to return a pointer to the data space
+
+  x->f_pan = f; //what?
+
+  /*inlets*/
+
+  /*extra inlets need to be freed afterwards so not to create a leak*/
+
+  x->x_in2 = inlet_new(&x->x_obj,&x->x_obj.ob_pd,&s_signal, &s_signal); //(interna of object, graphical rep.,substitution of 3 by 4 selector)
+  x->x_in3 = floatinlet_new(&x->x_obj,&x->f_pan);  // Passive, allows parts of data space written directly from outside. Not possible to check for illegal input. floatinlet_new(pointer to internal infrastructure, address where other objects can write too)
+
+  /*outlets*/
+
+  x->x_out = outlet_new(&x->x_obj, &s_signal);
+
+  return (void *)x;
+}
+
+/* ------------- Methods ----------------------- */
+/* 
+each method then has to be added in the class setup
+*/
+
+/*_perform has to return a pointer to integer that points to the address behind the stored pointers of the routine*/
+t_int *pan_tilde_perform(t_int *w) //pointer to array of integers (also pointers!) passed from dsp_add
+{
+  t_pan_tilde *x = (t_pan_tilde *)(w[1]);
+  t_sample *in1 = (t_sample *)(w[2]);
+  t_sample *in2 = (t_sample *)(w[3]);
+  t_sample *out = (t_sample *)(w[4]);
+  int n = (int)(w[5]);
+
+  t_sample f_pan = (x->f_pan<0)?0.0:(x->f_pan>1)?1.0:x->f_pan;
+  while(n--) *out++ = (*in1++)*(1-f_pan)+(*in2++)*f_pan;
+
+  return(w+6); // it's one more than declared on second argument of dsp_add
+}
+
+void pan_tilde_dsp(t_pan_tilde *x, t_signal **sp)
+{
+  dsp_add(pan_tilde_perform,5,x,sp[0]->s_vec,sp[1]->s_vec,sp[2]->s_vec,sp[0]->s_n);
+  /*dsp_add  perform method, number of following pointers, first signal,second signal, out signal,length of signal vector
+    t_signal contains s_vec, array of t_sample of size s_n*/
+}
+
+
+
+
+/*------------ Class setup ----------*/
+
+void pan_tilde_setup(void)
+{
+    //t_symbol *s = gensym("acoustics.pd");
+    
+    /* Generation of new class */    
+
+  pan_tilde_class = class_new(gensym("pan~"), (t_newmethod)pan_tilde_new, (t_method)pan_tilde_free,
+			    sizeof(t_pan_tilde), CLASS_DEFAULT, A_DEFFLOAT, 0); //specified free destructor
+    
+    /*Add methods to class*/
+  class_addmethod(pan_tilde_class, (t_method)pan_tilde_dsp, gensym("dsp"),0); // method for dsp, when Pd starts, a message with the selector dsp is sent to each object. Each object that has a method for "dsp" message is considered a signal class. 
+  CLASS_MAINSIGNALIN(pan_tilde_class, t_pan_tilde, f);
+ 
+  //class_sethelpsymbol(mtof_class, s);  
+}
+
