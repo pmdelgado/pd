@@ -1,0 +1,101 @@
+#N canvas 193 113 1098 561 10;
+#X floatatom 25 79 5 0 0 0 - - -;
+#X obj 25 107 * 44100;
+#X floatatom 25 165 5 0 0 0 - - -;
+#X obj 25 193 osc~;
+#X obj 25 222 rfft~;
+#X obj 25 251 *~;
+#X obj 63 250 *~;
+#X obj 25 280 +~;
+#X obj 24 311 sqrt~;
+#X obj 24 345 print~;
+#X obj 84 305 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X text 20 33 Umrechnung Re+Im -> Magnitude;
+#X text 74 78 Frequenz in bins;
+#X text 77 164 Frequenz in Hertz;
+#X text 75 137 Block Size;
+#X obj 25 136 / 256;
+#X obj 333 72 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 240 80 osc~ 440;
+#X obj 242 122 rfft~;
+#X obj 242 150 rifft~;
+#X obj 354 122 snapshot~;
+#X floatatom 354 150 5 0 0 0 - - -;
+#X obj 354 177 snapshot~;
+#X floatatom 354 205 5 0 0 0 - - -;
+#X obj 354 232 snapshot~;
+#X floatatom 354 260 5 0 0 0 - - -;
+#X obj 240 178 /~ 64;
+#X text 236 35 Normalisierung;
+#X text 184 292 Komisch: das block size im Einstellungen ist 256 \,
+die Normalisierung geht aber mit 64 Samples;
+#X floatatom 527 63 5 0 0 0 - - -;
+#X obj 526 165 rfft~;
+#X obj 526 222 *~;
+#X obj 573 222 *~;
+#X obj 526 300 sqrt~;
+#X obj 526 261 +~;
+#X obj 564 337 metro 250;
+#X obj 584 296 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1
+1;
+#X obj 530 368 tabwrite~ magnitud;
+#N canvas 0 0 450 300 (subpatch) 0;
+#X array magnitud 100 float 1;
+#A 0 0.0688057 0.0688039 0.0690572 0.0694798 0.0700864 0.0710324 0.0717659
+0.0729613 0.0743638 0.0760044 0.0779047 0.0800962 0.0826445 0.0855494
+0.0888917 0.0927399 0.097176 0.102323 0.108319 0.115358 0.12369 0.133664
+0.145839 0.16077 0.179635 0.20408 0.236907 0.28313 0.352871 0.469884
+0.706433 1.44363 60.4427 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0.156686 0.156684 0.157253 0.158209 0.159571 0.161476
+0.163511 0.166196 0.169378 0.173105 0.177441 0.182452 0.188201 0.194827
+0.202441 0.211204 0.221312 0.233027 0.246679 0.262705 0.281687 0.30442
+0.331957 0.366027 0.408961 0.46457 0.539197 0.64423 0.802516 1.06744
+1.59975 3.21519 45.7751 0 0 0;
+#X coords 0 90 32 0 256 140 2 0 0;
+#X restore 719 130 graph;
+#X obj 525 121 osc~;
+#X msg 482 43 22000;
+#X text 721 85 block size 64 samples \, also 32 bins fuer positiven
+freq;
+#X connect 0 0 1 0;
+#X connect 1 0 15 0;
+#X connect 2 0 3 0;
+#X connect 3 0 4 0;
+#X connect 4 0 5 0;
+#X connect 4 0 5 1;
+#X connect 4 1 6 0;
+#X connect 4 1 6 1;
+#X connect 5 0 7 0;
+#X connect 6 0 7 1;
+#X connect 7 0 8 0;
+#X connect 8 0 9 0;
+#X connect 10 0 9 0;
+#X connect 15 0 2 0;
+#X connect 16 0 20 0;
+#X connect 16 0 22 0;
+#X connect 16 0 24 0;
+#X connect 17 0 18 0;
+#X connect 17 0 20 0;
+#X connect 18 0 19 0;
+#X connect 18 1 19 1;
+#X connect 19 0 22 0;
+#X connect 19 0 26 0;
+#X connect 20 0 21 0;
+#X connect 22 0 23 0;
+#X connect 24 0 25 0;
+#X connect 26 0 24 0;
+#X connect 29 0 39 0;
+#X connect 30 0 31 0;
+#X connect 30 0 31 1;
+#X connect 30 1 32 0;
+#X connect 30 1 32 1;
+#X connect 31 0 34 0;
+#X connect 32 0 34 1;
+#X connect 33 0 37 0;
+#X connect 34 0 33 0;
+#X connect 35 0 37 0;
+#X connect 36 0 35 0;
+#X connect 39 0 30 0;
+#X connect 40 0 39 0;
